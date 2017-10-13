@@ -8,11 +8,47 @@
 </ion-header>
 
 <ion-content padding>
-  <h3>Ionic Menu Starter</h3>
+  <ion-title padding-top padding-bottom> My Task Today</ion-title>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
+  <ion-item #myItem>
+    <ion-input #newTask (keyup.enter)="addTask(newTask.value); newTask.value='' " type="text" placeholder="add a new task...."></ion-input>
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+    <button ion-button item-right (click)="addTask(newTask.value); newTask.value='' "> 
+      <ion-icon name="md-add-circle"></ion-icon>
+    </button>
+    
+    <button (click)="deleteSelected()" ion-button item-right color="danger">
+      <ion-icon name="md-trash"></ion-icon>      
+    </button>
+
+  </ion-item>
+
+  <ion-list no-lines #listTemp>
+
+    <ion-item-sliding *ngFor="let task of tasks; let index = id">
+      <ion-item>
+        <ion-checkbox [(ngModel)]="task.isDone">
+        </ion-checkbox>
+        <ion-item no-lines item-left text-wrap>
+          <ion-label *ngIf="!task.isEdit" color="primary">{{task.title}}</ion-label>
+          <ion-input *ngIf="task.isEdit" (keyup.enter)="task.isEdit=false" [(ngModel)]="task.title"> </ion-input>
+        </ion-item>
+      </ion-item>
+
+      <ion-item-options side="left">
+        <button ion-button (click)="editTask(task)"> 
+                  <ion-icon name="ios-create"></ion-icon>
+                </button>
+      </ion-item-options>
+
+      <ion-item-options side="right">
+        <button ion-button color='danger' (click)="deleteTask(id)"> 
+                  <ion-icon name="md-trash"></ion-icon>
+              </button>
+      </ion-item-options>
+
+    </ion-item-sliding>
+
+  </ion-list>
+
 </ion-content>
